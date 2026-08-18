@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: lenavs-backend
+    env: node
+    rootDir: .
+    buildCommand: bash render-build.sh
+    startCommand: npm start
+    plan: starter
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: DEMUCS_PYTHON_BIN
+        value: python3
+      - key: DEMUCS_MODEL
+        value: htdemucs
+      - key: DEMUCS_DEVICE
+        value: cpu
+      - key: DEMUCS_TIMEOUT_MS
+        value: 1200000
+      - key: DEMUCS_MP3_BITRATE
+        value: 320
