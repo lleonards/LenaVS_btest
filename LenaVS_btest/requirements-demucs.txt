@@ -1,0 +1,6 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+torchaudio
+demucs==4.0.1
+# WhisperX fornece transcrição e alinhamento por palavra localmente.
+whisperx==3.3.1
