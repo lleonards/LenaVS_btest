@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: lenavs-backend
+    env: docker
+    rootDir: .
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    envVars:
+      - key: DEMUCS_PYTHON_BIN
+        value: python3
+      - key: DEMUCS_CLI_BIN
+        value: demucs
+      - key: DEMUCS_MODEL
+        value: htdemucs
+      - key: DEMUCS_DEVICE
+        value: cpu
+      - key: DEMUCS_THREADS
+        value: 1
+      - key: DEMUCS_TIMEOUT_MS
+        value: 1200000
+      - key: DEMUCS_MP3_BITRATE
+        value: 320
+      - key: ALIGNER_PYTHON_BIN
+        value: python3.12
+      - key: ALIGNER_TIMEOUT_MS
+        value: 1200000
+      - key: CTC_ALIGNER_BATCH_SIZE
+        value: 4
+      - key: CTC_ALIGNER_MODEL_PATH
+        value: /tmp/lenavs/ctc_forced_aligner/model.onnx
