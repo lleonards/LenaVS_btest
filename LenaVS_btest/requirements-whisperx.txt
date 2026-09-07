@@ -1,8 +1,0 @@
-# Dependências Python do WhisperX (sincronização automática de letras)
-# Python 3.10 ou 3.11 (o Dockerfile usa Debian bookworm -> Python 3.11).
-# Wheels de CPU para evitar download gigante de CUDA.
---extra-index-url https://download.pytorch.org/whl/cpu
-torch==2.2.2
-torchaudio==2.2.2
-faster-whisper>=1.0.0
-whisperx==3.1.1
