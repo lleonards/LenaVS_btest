@@ -1,0 +1,4 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+torchaudio
+whisperx==3.3.1
