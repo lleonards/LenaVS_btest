@@ -1,0 +1,2 @@
+# torch/torchaudio vêm do requirements-whisperx.txt (mesmas versões fixadas).
+demucs==4.0.1
