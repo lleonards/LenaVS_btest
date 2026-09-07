@@ -1,7 +1,0 @@
-# The automatic lyrics synchronization engine required by LenaVS.
-# Keep this package pinned: 1.0.2 is the supported API used by scripts/align_lyrics.py.
-ctc_forced_aligner==1.0.2
-numpy==1.26.4
-librosa==0.10.2.post1
-onnxruntime==1.20.1
-Unidecode==1.3.8
