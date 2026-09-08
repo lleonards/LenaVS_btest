@@ -1,0 +1,35 @@
+services:
+  - type: web
+    name: lenavs-backend
+    env: docker
+    rootDir: .
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    envVars:
+      - key: DEMUCS_PYTHON_BIN
+        value: python3
+      - key: DEMUCS_CLI_BIN
+        value: demucs
+      - key: DEMUCS_MODEL
+        value: htdemucs
+      - key: DEMUCS_DEVICE
+        value: cpu
+      - key: DEMUCS_THREADS
+        value: 1
+      - key: DEMUCS_TIMEOUT_MS
+        value: 1200000
+      - key: DEMUCS_MP3_BITRATE
+        value: 320
+      # ── Lyrics Aligner (ctc-forced-aligner==1.0.2, Python 3.12 OBRIGATÓRIO) ──
+      # Docker: o contêiner roda python:3.12-slim e o aligner é instalado no
+      # python do sistema. Em builds sem Docker (render-build.sh), aponte para
+      # o python do venv criado em Python 3.12:
+      #   value: /opt/render/project/src/backend/.venv-aligner/bin/python
+      - key: ALIGNER_PYTHON_BIN
+        value: python3
+      - key: ALIGNER_LANGUAGE
+        value: por
+      - key: ALIGNER_BATCH_SIZE
+        value: 4
+      - key: ALIGNER_TIMEOUT_MS
+        value: 1200000

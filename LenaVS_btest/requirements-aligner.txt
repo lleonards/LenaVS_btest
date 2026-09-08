@@ -1,0 +1,30 @@
+# Dependências Python do Lyrics Aligner (sincronização automática de letras)
+#
+# ⚠️ OBRIGATÓRIO executar em Python 3.12, em um ambiente (venv) dedicado:
+#
+#   python3.12 -m venv .venv-aligner
+#   . .venv-aligner/bin/activate
+#   python -m pip install --upgrade pip setuptools wheel
+#   pip install -r requirements-aligner.txt
+#
+# Depois aponte ALIGNER_PYTHON_BIN para o python desse venv, ex.:
+#   ALIGNER_PYTHON_BIN=/caminho/para/.venv-aligner/bin/python
+#
+# Versão fixada — NÃO utilizar ctc-forced-aligner==2.0.1.
+ctc-forced-aligner==1.0.2
+
+# Execução em CPU (rodas leves, sem download de CUDA)
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.2.2
+torchaudio==2.2.2
+
+# Dependências diretas do ctc-forced-aligner 1.0.2 (fixadas para builds reproduzíveis;
+# sem elas o pip resolve sozinho a partir do install_requires do pacote)
+requests
+numpy
+onnxruntime
+librosa>=0.10.2.post1
+
+# Tokenização de sentença usada pelo split_size="sentence" (opcional, mas o
+# pacote pode importar em alguns caminhos de código)
+nltk
