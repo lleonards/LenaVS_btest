@@ -1,0 +1,71 @@
+# LenaVS Backend — Verificação e Correções
+
+Este pacote contém o backend da LenaVS verificado e pronto para uso.
+
+## O que foi feito
+
+### Proteção do servidor durante sincronização e renderização
+
+- O Lyrics Aligner, Demucs e a renderização de vídeo agora compartilham uma
+  fila de recursos pesados com uma execução por vez por padrão.
+- O limite não depende de `os.cpus()`, pois containers podem enxergar CPUs do
+  host e iniciar workers demais para o plano contratado.
+- O alinhador usa batch 1 e os processos FFmpeg ficam limitados a uma thread.
+- O upload de áudio detecta o formato real com FFprobe, corrigindo casos em que
+  um arquivo AAC/M4A chega com extensão `.mp3`; a sincronização também converte
+  o áudio para WAV PCM antes de chamar o alinhador.
+- A fila aceita poucas tarefas pendentes e responde `503` quando está cheia,
+  evitando acumular processos até o servidor ficar sem memória.
+- O endpoint de health check informa `heavyTasks.active` e
+  `heavyTasks.pending`.
+
+1. **Verificação completa de sintaxe** de todos os arquivos (`node --check` em todos os `.js`/`.mjs`): passou sem nenhum erro.
+2. **Fluxo de autenticação revisado** — não foi necessária mudança estrutural:
+   - Cadastro, login e confirmação de e-mail acontecem **direto entre o frontend e o Supabase Auth**.
+   - O backend apenas valida o token JWT que chega no header `Authorization: Bearer <token>` via `supabase.auth.getUser()` (padrão oficial) e **auto-repara** o perfil em `public.users` se o trigger falhar.
+3. **Documentação de configuração abaixo** — a maioria dos problemas relatados (tela branca, erro de login) depende das variáveis de ambiente e da configuração do Supabase, não do código.
+
+## Variáveis de ambiente (obrigatórias)
+
+Copie `.env.example` para `.env` e preencha:
+
+```env
+SUPABASE_URL=https://SEU-PROJETO.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=SUA_SERVICE_ROLE_KEY_AQUI
+PORT=10000
+ALLOWED_ORIGINS=http://localhost:5173,https://SEU-FRONTEND.onrender.com
+```
+
+Integrações opcionais (não afetam login/cadastro): `OPENAI_API_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `SMTP_*`.
+
+## Banco de dados (Supabase)
+
+1. No painel do Supabase, abra o **SQL Editor**.
+2. Execute **todo** o conteúdo de `supabase/schema.sql`.
+3. Isso cria as tabelas (`users`, `projects`, `payment_transactions`, ...), as *policies* de RLS e o trigger `handle_new_user` que insere o usuário em `public.users` automaticamente ao cadastrar.
+4. Em **Authentication → URL Configuration**: defina o *Site URL* igual à URL do frontend e inclua essa URL em *Redirect URLs* (sem `#`).
+
+## Instalação e execução
+
+```bash
+npm install   # no seu dispositivo
+npm start     # or npm run dev (nodemon)
+```
+
+Health check: `GET /health` e `GET /api/health`.
+
+Para um servidor de 1 vCPU/2 GB, mantenha estas variáveis:
+
+```env
+VIDEO_WORKER_CONCURRENCY=1
+HEAVY_TASK_CONCURRENCY=1
+HEAVY_TASK_MAX_PENDING=2
+ALIGNER_BATCH_SIZE=1
+DEMUCS_THREADS=1
+NODE_OPTIONS=--max-old-space-size=512
+```
+
+## Deploy
+
+- Render (Web Service) com o `Dockerfile` incluso; garanta que o painel tenha as variáveis acima.
+- Em produção, `ALLOWED_ORIGINS` deve conter o domínio real do frontend.
