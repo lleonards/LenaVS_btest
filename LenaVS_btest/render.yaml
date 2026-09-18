@@ -1,0 +1,11 @@
+# Render Blueprint (opcional). As chaves secretas (Supabase, Stripe, SMTP)
+# devem ser configuradas no painel do Render -> Environment, não aqui.
+services:
+  - type: web
+    name: lenavs-backend
+    env: docker
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: PORT
+        value: 10000
