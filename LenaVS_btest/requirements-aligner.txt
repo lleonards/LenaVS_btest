@@ -1,0 +1,22 @@
+# =========================================================
+# LenaVS Backend - dependências do sincronizador de letras
+# ---------------------------------------------------------
+# Instale APENAS se quiser usar o botão "Sincronizar automaticamente".
+#
+#   python3 -m venv /opt/lenavs-aligner
+#   /opt/lenavs-aligner/bin/pip install --no-cache-dir -r requirements-aligner.txt
+#   LYRICS_ALIGN_PYTHON_BIN=/opt/lenavs-aligner/bin/python3
+#
+# CPU-only (servidor de 1 CPU / 2 GB de RAM). NÃO instale o extra [gpu].
+# =========================================================
+
+ctc-forced-aligner==1.0.2
+
+# O modelo ONNX padrão do pacote é servido por onnxruntime (CPU).
+# onnxruntime + numpy + librosa já vêm como dependências do pacote acima,
+# mas são fixados aqui para deixar o ambiente reproduzível.
+onnxruntime>=1.17,<2
+numpy>=1.24,<3
+librosa>=0.10.2.post1
+soundfile>=0.12
+unidecode>=1.3
